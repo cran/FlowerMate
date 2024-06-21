@@ -1,0 +1,220 @@
+---
+title: "FlowerMate"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FlowerMate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(FlowerMate)
+```
+
+
+
+FlowerMate computes the original reciprocity indexes of Sánchez et al. (2008, 2013) and Armbruster et al (2017), and their multidimensional variants, developed by Simón-Porcar et al. (2023). These indexes are applicable to common heterostylous populations and to any other type of stylar dimorphic and trimorphic populations, such as stylar-dimorphic, three-dimensional heterostylous and enantiostylous plants. FlowerMate includes a main function, inaccuracy, that computes either the one-, two- or three-dimensional versions of the Reciprocity and Inaccuracy Indexes, either for dimorphic or trimorphic populations, depending on the data input and options chosen. The input format includes one row per measured sex organ and the eight following columns: population code, floral morph, Individual ID number, Sex organ ID number, Sex organ type (stigma or anther), and x, y, z coordinates. The user can select the coordinates to compute, hence obtaining either uni-, bi- or three-dimensional indexes. In stylar polymorphic species with same sex organs at stricklingly different locations (e.g. enantiostylous flowers with both left- and right-facing stamens), the user can select different data subsets for computation. inaccuracy computes the Reciprocity and Inaccuracy Indexes also in presence of missing data, warning that the values may not be comparable across populations (e.g. if the distribution of missing data is strongly biased across morphs or dimensions). There are short and extended output options for inaccuracy, providing either the Reciprocity and Inaccuracy values alone or accompanied of all the intermediate components calculated for each population. FlowerMate also includes functions to simulate style-polymorphic populations with the average coordinates and variance specified for each sex organ level and morph.
+
+The objective of this vignete is to illustrate the usage of the different functions and arguments of the FlowerMate package. The first step is to install and load the package:
+
+```{r,eval=F}
+install.packages(FlowerMate)
+library(FlowerMate)
+```
+
+**These above first two lines are not working yet (not in CRAN), we should use instead: source("FlowerMate_1.0.R")**
+
+# Basic input data format
+
+As mentioned above, the input dataset must contain at least 8 columns, being three of them for coordinates x, y and z. We can use the function ```SimDimor()``` to produce example dimorphic dataset and visualize the content of the input matrices.
+
+This is a matrix with only 2 individuals from a single population, with 3D measurements for one stamen and one anther each (using all the defaults parameters, large and short morphs show around 20 and 8 cm length in all dimensions):
+
+```{r}
+
+## this is just you to get this same random example in your computer
+set.seed(1234)
+SimDimor(NIDL = 2, NIDS = 2)
+
+```
+
+We can also produce data for 2D and 1D setting mean and sd values to 0 as follow:
+```{r}
+
+## this is just you to get this same random example in your computer
+set.seed(1234)
+SimDimor(NIDL = 2, NIDS = 2,
+LSTmeanZ = 0, LSTsdZ = 0, LANmeanZ = 0, LANsdZ = 0,
+SSTmeanZ = 0, SSTsdZ = 0, SANmeanZ = 0, SANsdZ = 0)
+
+## this is just you to get this same random example in your computer
+set.seed(1234)
+SimDimor(NIDL = 2, NIDS = 2,LSTmeanX = 0, LSTsdX = 0,
+LANmeanX = 0, LANsdX = 0, SSTmeanX = 0, SSTsdX = 0, SANmeanX = 0, SANsdX = 0,
+LSTmeanZ = 0, LSTsdZ = 0, LANmeanZ = 0, LANsdZ = 0,
+SSTmeanZ = 0, SSTsdZ = 0, SANmeanZ = 0, SANsdZ = 0)
+
+```
+
+Note that dimensions with no data must be represented in the input dataset with 0
+
+
+The code above generates tiny inputs to visualize the content, but we can produce larger dataset to illustrate the analyses of real dataset. In addition, the above examples use most of the default arguments (mainly mean and standard deviation values). The lines below will produce four more realistic dataset for: 1) one enantiostylous population; 2) one distylous population; 3) one distylous population with multiple sexual organs; and 4) one tristylous population. The first example contains 3D data whereas the three remaining contains 1D data:
+
+```{r}
+
+
+set.seed(1111)
+enantiostylous.dat<- SimDimor (NIDL=20, NIDS=20,Nst=1,Nan=3,Norg.st=1,Norg.an=1,
+LSTmeanX=-10, LSTsdX=2, LANmeanX=c(9,7,-7),LANsdX=c(2,2,2),
+SSTmeanX=9, SSTsdX=2, SANmeanX=c(-9,-6,6), SANsdX=c(2,2,2),
+LSTmeanY=9, LSTsdY=2, LANmeanY=c(7,3,3) ,LANsdY=c(2,2,2),
+SSTmeanY=8, SSTsdY=2, SANmeanY=c(6,2,3), SANsdY=c(2,2,2),
+LSTmeanZ=15, LSTsdZ=2, LANmeanZ=c(16,15,15) ,LANsdZ=c(2,2,2),
+SSTmeanZ=16, SSTsdZ=2, SANmeanZ=c(15,15,15), SANsdZ=c(2,2,2),
+pop_code="enantiostylous")
+
+set.seed(2222)
+distylous.dat <- SimDimor (NIDL=20, NIDS=20,Nst=1,Nan=1,Norg.st=1,Norg.an=1,
+LSTmeanX=0, LSTsdX=0, LANmeanX=0,LANsdX=0,
+SSTmeanX=0, SSTsdX=0, SANmeanX=0, SANsdX=0,
+LSTmeanY=8, LSTsdY=1, LANmeanY=4 ,LANsdY=1,
+SSTmeanY=5, SSTsdY=1, SANmeanY=9, SANsdY=1,
+LSTmeanZ=0, LSTsdZ=0, LANmeanZ=0 ,LANsdZ=0,
+SSTmeanZ=0, SSTsdZ=0, SANmeanZ=0, SANsdZ=0,
+pop_code="distylous")
+
+set.seed(3333)
+styledimor.2antherwhorl.dat <- SimDimor (NIDL=20, NIDS=20,Nst=1,Nan=2,Norg.st=1,Norg.an=1,
+LSTmeanX=0, LSTsdX=0, LANmeanX=c(0,0),LANsdX=c(0,0),
+SSTmeanX=0, SSTsdX=0, SANmeanX=c(0,0), SANsdX=c(0,0),
+LSTmeanY=8, LSTsdY=1, LANmeanY=c(6,5) ,LANsdY=c(1,1),
+SSTmeanY=4, SSTsdY=1, SANmeanY=c(6,5), SANsdY=c(1,1),
+LSTmeanZ=0, LSTsdZ=0, LANmeanZ=c(0,0) ,LANsdZ=c(0,0),
+SSTmeanZ=0, SSTsdZ=0, SANmeanZ=c(0,0), SANsdZ=c(0,0),
+pop_code="styledimorphic")
+
+set.seed(4444)
+tristylous.dat <-SimTrimor(NIDL=20,NIDM=20,NIDS=20,
+LUPmeanX=0, LUPsdX=0, LBWmeanX=0 ,LBWsdX=0, LLWmeanX=0, LLWsdX=0,
+MUPmeanX=0, MUPsdX=0, MBWmeanX=0 ,MBWsdX=0, MLWmeanX=0, MLWsdX=0,
+SUPmeanX=0, SUPsdX=0, SBWmeanX=0 ,SBWsdX=0, SLWmeanX=0, SLWsdX=0,
+LUPmeanY=12, LUPsdY=2, LBWmeanY=8 ,LBWsdY=2, LLWmeanY=4, LLWsdY=2,
+MUPmeanY=12, MUPsdY=2, MBWmeanY=8 ,MBWsdY=2, MLWmeanY=4, MLWsdY=2,
+SUPmeanY=12, SUPsdY=2, SBWmeanY=8 ,SBWsdY=2, SLWmeanY=4, SLWsdY=2,
+LUPmeanZ=0, LUPsdZ=0, LBWmeanZ=0 ,LBWsdZ=0, LLWmeanZ=0, LLWsdZ=0,
+MUPmeanZ=0, MUPsdZ=0, MBWmeanZ=0 ,MBWsdZ=0, MLWmeanZ=0, MLWsdZ=0,
+SUPmeanZ=0, SUPsdZ=0, SBWmeanZ=0 ,SBWsdZ=0, SLWmeanZ=0, SLWsdZ=0,
+pop_code="tristylous")
+```
+
+# Estimating indexes
+
+## Dimorphic, default arguments
+
+```{r}
+inaccuracy(enantiostylous.dat)
+inaccuracy(distylous.dat)
+inaccuracy(styledimor.2antherwhorl.dat)
+inaccuracy(tristylous.dat)
+```
+
+## Dimorphic, ignoring coordinates
+
+Lets take a look on the arguments. First, we can analyse every dimension (or any subset of dimensions) separately using useonly.dim. Thus, we can analyse any subset of dimensions in the enantiostylous dataset:
+
+```{r}
+inaccuracy(enantiostylous.dat)
+inaccuracy(enantiostylous.dat, useonly.dim = c("x"))
+inaccuracy(enantiostylous.dat, useonly.dim = c("y"))
+```
+
+## Dimorphic, getting a detailed ouput including a complete list of indices estimated during the computation.
+
+### verbose output
+```{r}
+inaccuracy(enantiostylous.dat, verbose=TRUE)
+inaccuracy(distylous.dat, verbose=TRUE)
+inaccuracy(styledimor.2antherwhorl.dat, verbose=TRUE)
+inaccuracy(tristylous.dat, verbose=TRUE)
+```
+
+
+### intramorph comparisons only.
+
+```{r, error=TRUE}
+inaccuracy(enantiostylous.dat, intramorph=TRUE)
+inaccuracy(distylous.dat, intramorph=TRUE)
+inaccuracy(styledimor.2antherwhorl.dat, intramorph=TRUE)
+inaccuracy(tristylous.dat, intramorph=TRUE)
+```
+
+### Missing data
+By default, the inaccuracy function fail to compute input data containing at least one missing data. Using the argument na.rm = TRUE will perform computation ignoring the missing value for this particular individual and variable (just like na.rm does within the mean() or sd() functions).
+
+```{r, error=TRUE}
+# This will create new objects and insert NA in the first value of every y column
+
+enantiostylous.dat_NA <- enantiostylous.dat
+distylous.dat_NA <- distylous.dat
+styledimor.2antherwhorl.dat_NA <- styledimor.2antherwhorl.dat
+tristylous.dat_NA <- tristylous.dat
+
+
+enantiostylous.dat_NA[1,"y"] <- distylous.dat_NA[1,"y"] <- styledimor.2antherwhorl.dat_NA[1,"y"] <- tristylous.dat_NA[1,"y"]<- NA
+
+inaccuracy(enantiostylous.dat)
+inaccuracy(distylous.dat)
+inaccuracy(styledimor.2antherwhorl.dat)
+inaccuracy(tristylous.dat)
+
+inaccuracy(enantiostylous.dat, na.rm=T)
+inaccuracy(distylous.dat, na.rm=T)
+inaccuracy(styledimor.2antherwhorl.dat, na.rm=T)
+inaccuracy(tristylous.dat, na.rm=T)
+
+```
+
+### Subsetting verticiles
+In datasets with multiple verticiles it is possible to focus the analysis in a given subset. For example, the code below applies the function to a subset of anthers only (namely AN1 and AN3):(
+
+```{r, error=FALSE}
+inaccuracy(enantiostylous.dat)
+inaccuracy(enantiostylous.dat,useonly.vert=c("ST","AN1","AN3"))
+```
+
+### Multi-populations inputs
+
+All the input data used so far contains only one population, but the inaccuracy function can handle multiple populations and provide populational estimates. All the arguments detailed above behave the same regardless the number of populations:
+
+```{r}
+## This code will generate a five-populations input data:
+
+SEEDS<-4321:4325
+exampleDataset<-c()
+for(i in 1:length(SEEDS))
+{
+set.seed(SEEDS[i])
+exampleDataset <- rbind(exampleDataset,SimDimor(NIDL = 10,NIDS = 10,
+Nst = 1, Nan = 1, LSTmeanX = 22, LSTsdX = 0.7, LANmeanX = 6, LANsdX = 0.2,
+SSTmeanX = 6, SSTsdX = 0.2, SANmeanX = 22, SANsdX = 0.7, LSTmeanY = 20,
+LSTsdY = 0.5, LANmeanY = 8, LANsdY = 0.5, SSTmeanY = 8, SSTsdY = 0.5,
+SANmeanY = 20, SANsdY = 0.5, LSTmeanZ = 18, LSTsdZ = 0.3, LANmeanZ = 9,
+LANsdZ = 0.3, SSTmeanZ = 9, SSTsdZ = 0.3, SANmeanZ = 18, SANsdZ = 0.3,
+pop_code=paste("pop",i,sep="")))
+}
+
+## Basic analysis
+inaccuracy(exampleDataset)
+## Verbose
+inaccuracy(exampleDataset,verbose=TRUE)
+## Subsetting dimensions
+inaccuracy(exampleDataset,useonly.dim = c("x","y"))
+```

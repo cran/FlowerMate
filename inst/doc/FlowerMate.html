@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>FlowerMate</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">FlowerMate</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(FlowerMate)</span></code></pre></div>
+<p>FlowerMate computes the original reciprocity indexes of Sánchez et
+al. (2008, 2013) and Armbruster et al (2017), and their multidimensional
+variants, developed by Simón-Porcar et al. (2023). These indexes are
+applicable to common heterostylous populations and to any other type of
+stylar dimorphic and trimorphic populations, such as stylar-dimorphic,
+three-dimensional heterostylous and enantiostylous plants. FlowerMate
+includes a main function, inaccuracy, that computes either the one-,
+two- or three-dimensional versions of the Reciprocity and Inaccuracy
+Indexes, either for dimorphic or trimorphic populations, depending on
+the data input and options chosen. The input format includes one row per
+measured sex organ and the eight following columns: population code,
+floral morph, Individual ID number, Sex organ ID number, Sex organ type
+(stigma or anther), and x, y, z coordinates. The user can select the
+coordinates to compute, hence obtaining either uni-, bi- or
+three-dimensional indexes. In stylar polymorphic species with same sex
+organs at stricklingly different locations (e.g. enantiostylous flowers
+with both left- and right-facing stamens), the user can select different
+data subsets for computation. inaccuracy computes the Reciprocity and
+Inaccuracy Indexes also in presence of missing data, warning that the
+values may not be comparable across populations (e.g. if the
+distribution of missing data is strongly biased across morphs or
+dimensions). There are short and extended output options for inaccuracy,
+providing either the Reciprocity and Inaccuracy values alone or
+accompanied of all the intermediate components calculated for each
+population. FlowerMate also includes functions to simulate
+style-polymorphic populations with the average coordinates and variance
+specified for each sex organ level and morph.</p>
+<p>The objective of this vignete is to illustrate the usage of the
+different functions and arguments of the FlowerMate package. The first
+step is to install and load the package:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">install.packages</span>(FlowerMate)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(FlowerMate)</span></code></pre></div>
+<p><strong>These above first two lines are not working yet (not in
+CRAN), we should use instead: source(“FlowerMate_1.0.R”)</strong></p>
+<div id="basic-input-data-format" class="section level1">
+<h1>Basic input data format</h1>
+<p>As mentioned above, the input dataset must contain at least 8
+columns, being three of them for coordinates x, y and z. We can use the
+function <code>SimDimor()</code> to produce example dimorphic dataset
+and visualize the content of the input matrices.</p>
+<p>This is a matrix with only 2 individuals from a single population,
+with 3D measurements for one stamen and one anther each (using all the
+defaults parameters, large and short morphs show around 20 and 8 cm
+length in all dimensions):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="do">## this is just you to get this same random example in your computer</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">SimDimor</span>(<span class="at">NIDL =</span> <span class="dv">2</span>, <span class="at">NIDS =</span> <span class="dv">2</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;   pop_code morph ID_indiv ID_sexorg sexorg         x         y         z</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 1    test1     L        1         1     ST 19.396467 19.717774 19.744495</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 2    test1     L        1         2     AN 20.138715 19.554981 19.544402</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 3    test1     L        2         3     ST  8.542221  7.761404  7.581414</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 4    test1     L        2         4     AN  6.827151  7.500807  9.207918</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 5    test1     S        3         5     ST  8.214562  7.611873  8.067044</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 6    test1     S        3         6     AN  8.253028  8.032229  7.754657</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 7    test1     S        4         7     ST 19.712630 20.479747 19.779726</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 8    test1     S        4         8     AN 19.726684 19.944857 20.229795</span></span></code></pre></div>
+<p>We can also produce data for 2D and 1D setting mean and sd values to
+0 as follow:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="do">## this is just you to get this same random example in your computer</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">SimDimor</span>(<span class="at">NIDL =</span> <span class="dv">2</span>, <span class="at">NIDS =</span> <span class="dv">2</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="at">LSTmeanZ =</span> <span class="dv">0</span>, <span class="at">LSTsdZ =</span> <span class="dv">0</span>, <span class="at">LANmeanZ =</span> <span class="dv">0</span>, <span class="at">LANsdZ =</span> <span class="dv">0</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="at">SSTmeanZ =</span> <span class="dv">0</span>, <span class="at">SSTsdZ =</span> <span class="dv">0</span>, <span class="at">SANmeanZ =</span> <span class="dv">0</span>, <span class="at">SANsdZ =</span> <span class="dv">0</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   pop_code morph ID_indiv ID_sexorg sexorg         x         y z</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 1    test1     L        1         1     ST 19.396467 19.717774 0</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 2    test1     L        1         2     AN 20.138715 19.554981 0</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 3    test1     L        2         3     ST  8.542221  7.761404 0</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 4    test1     L        2         4     AN  6.827151  7.500807 0</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 5    test1     S        3         5     ST  8.214562  7.611873 0</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; 6    test1     S        3         6     AN  8.253028  8.032229 0</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; 7    test1     S        4         7     ST 19.712630 20.479747 0</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; 8    test1     S        4         8     AN 19.726684 19.944857 0</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="do">## this is just you to get this same random example in your computer</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="fu">SimDimor</span>(<span class="at">NIDL =</span> <span class="dv">2</span>, <span class="at">NIDS =</span> <span class="dv">2</span>,<span class="at">LSTmeanX =</span> <span class="dv">0</span>, <span class="at">LSTsdX =</span> <span class="dv">0</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="at">LANmeanX =</span> <span class="dv">0</span>, <span class="at">LANsdX =</span> <span class="dv">0</span>, <span class="at">SSTmeanX =</span> <span class="dv">0</span>, <span class="at">SSTsdX =</span> <span class="dv">0</span>, <span class="at">SANmeanX =</span> <span class="dv">0</span>, <span class="at">SANsdX =</span> <span class="dv">0</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="at">LSTmeanZ =</span> <span class="dv">0</span>, <span class="at">LSTsdZ =</span> <span class="dv">0</span>, <span class="at">LANmeanZ =</span> <span class="dv">0</span>, <span class="at">LANsdZ =</span> <span class="dv">0</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="at">SSTmeanZ =</span> <span class="dv">0</span>, <span class="at">SSTsdZ =</span> <span class="dv">0</span>, <span class="at">SANmeanZ =</span> <span class="dv">0</span>, <span class="at">SANsdZ =</span> <span class="dv">0</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;   pop_code morph ID_indiv ID_sexorg sexorg x         y z</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt; 1    test1     L        1         1     ST 0 19.396467 0</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; 2    test1     L        1         2     AN 0 20.138715 0</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; 3    test1     L        2         3     ST 0  8.542221 0</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt; 4    test1     L        2         4     AN 0  6.827151 0</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt; 5    test1     S        3         5     ST 0  8.214562 0</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt; 6    test1     S        3         6     AN 0  8.253028 0</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt; 7    test1     S        4         7     ST 0 19.712630 0</span></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="co">#&gt; 8    test1     S        4         8     AN 0 19.726684 0</span></span></code></pre></div>
+<p>Note that dimensions with no data must be represented in the input
+dataset with 0</p>
+<p>The code above generates tiny inputs to visualize the content, but we
+can produce larger dataset to illustrate the analyses of real dataset.
+In addition, the above examples use most of the default arguments
+(mainly mean and standard deviation values). The lines below will
+produce four more realistic dataset for: 1) one enantiostylous
+population; 2) one distylous population; 3) one distylous population
+with multiple sexual organs; and 4) one tristylous population. The first
+example contains 3D data whereas the three remaining contains 1D
+data:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1111</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>enantiostylous.dat<span class="ot">&lt;-</span> <span class="fu">SimDimor</span> (<span class="at">NIDL=</span><span class="dv">20</span>, <span class="at">NIDS=</span><span class="dv">20</span>,<span class="at">Nst=</span><span class="dv">1</span>,<span class="at">Nan=</span><span class="dv">3</span>,<span class="at">Norg.st=</span><span class="dv">1</span>,<span class="at">Norg.an=</span><span class="dv">1</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="at">LSTmeanX=</span><span class="sc">-</span><span class="dv">10</span>, <span class="at">LSTsdX=</span><span class="dv">2</span>, <span class="at">LANmeanX=</span><span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">7</span>,<span class="sc">-</span><span class="dv">7</span>),<span class="at">LANsdX=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="at">SSTmeanX=</span><span class="dv">9</span>, <span class="at">SSTsdX=</span><span class="dv">2</span>, <span class="at">SANmeanX=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">9</span>,<span class="sc">-</span><span class="dv">6</span>,<span class="dv">6</span>), <span class="at">SANsdX=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="at">LSTmeanY=</span><span class="dv">9</span>, <span class="at">LSTsdY=</span><span class="dv">2</span>, <span class="at">LANmeanY=</span><span class="fu">c</span>(<span class="dv">7</span>,<span class="dv">3</span>,<span class="dv">3</span>) ,<span class="at">LANsdY=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="at">SSTmeanY=</span><span class="dv">8</span>, <span class="at">SSTsdY=</span><span class="dv">2</span>, <span class="at">SANmeanY=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">SANsdY=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="at">LSTmeanZ=</span><span class="dv">15</span>, <span class="at">LSTsdZ=</span><span class="dv">2</span>, <span class="at">LANmeanZ=</span><span class="fu">c</span>(<span class="dv">16</span>,<span class="dv">15</span>,<span class="dv">15</span>) ,<span class="at">LANsdZ=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="at">SSTmeanZ=</span><span class="dv">16</span>, <span class="at">SSTsdZ=</span><span class="dv">2</span>, <span class="at">SANmeanZ=</span><span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">15</span>), <span class="at">SANsdZ=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="at">pop_code=</span><span class="st">&quot;enantiostylous&quot;</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2222</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>distylous.dat <span class="ot">&lt;-</span> <span class="fu">SimDimor</span> (<span class="at">NIDL=</span><span class="dv">20</span>, <span class="at">NIDS=</span><span class="dv">20</span>,<span class="at">Nst=</span><span class="dv">1</span>,<span class="at">Nan=</span><span class="dv">1</span>,<span class="at">Norg.st=</span><span class="dv">1</span>,<span class="at">Norg.an=</span><span class="dv">1</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="at">LSTmeanX=</span><span class="dv">0</span>, <span class="at">LSTsdX=</span><span class="dv">0</span>, <span class="at">LANmeanX=</span><span class="dv">0</span>,<span class="at">LANsdX=</span><span class="dv">0</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="at">SSTmeanX=</span><span class="dv">0</span>, <span class="at">SSTsdX=</span><span class="dv">0</span>, <span class="at">SANmeanX=</span><span class="dv">0</span>, <span class="at">SANsdX=</span><span class="dv">0</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="at">LSTmeanY=</span><span class="dv">8</span>, <span class="at">LSTsdY=</span><span class="dv">1</span>, <span class="at">LANmeanY=</span><span class="dv">4</span> ,<span class="at">LANsdY=</span><span class="dv">1</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="at">SSTmeanY=</span><span class="dv">5</span>, <span class="at">SSTsdY=</span><span class="dv">1</span>, <span class="at">SANmeanY=</span><span class="dv">9</span>, <span class="at">SANsdY=</span><span class="dv">1</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="at">LSTmeanZ=</span><span class="dv">0</span>, <span class="at">LSTsdZ=</span><span class="dv">0</span>, <span class="at">LANmeanZ=</span><span class="dv">0</span> ,<span class="at">LANsdZ=</span><span class="dv">0</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="at">SSTmeanZ=</span><span class="dv">0</span>, <span class="at">SSTsdZ=</span><span class="dv">0</span>, <span class="at">SANmeanZ=</span><span class="dv">0</span>, <span class="at">SANsdZ=</span><span class="dv">0</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="at">pop_code=</span><span class="st">&quot;distylous&quot;</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3333</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>styledimor<span class="fl">.2</span>antherwhorl.dat <span class="ot">&lt;-</span> <span class="fu">SimDimor</span> (<span class="at">NIDL=</span><span class="dv">20</span>, <span class="at">NIDS=</span><span class="dv">20</span>,<span class="at">Nst=</span><span class="dv">1</span>,<span class="at">Nan=</span><span class="dv">2</span>,<span class="at">Norg.st=</span><span class="dv">1</span>,<span class="at">Norg.an=</span><span class="dv">1</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="at">LSTmeanX=</span><span class="dv">0</span>, <span class="at">LSTsdX=</span><span class="dv">0</span>, <span class="at">LANmeanX=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="at">LANsdX=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="at">SSTmeanX=</span><span class="dv">0</span>, <span class="at">SSTsdX=</span><span class="dv">0</span>, <span class="at">SANmeanX=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">SANsdX=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="at">LSTmeanY=</span><span class="dv">8</span>, <span class="at">LSTsdY=</span><span class="dv">1</span>, <span class="at">LANmeanY=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">5</span>) ,<span class="at">LANsdY=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="at">SSTmeanY=</span><span class="dv">4</span>, <span class="at">SSTsdY=</span><span class="dv">1</span>, <span class="at">SANmeanY=</span><span class="fu">c</span>(<span class="dv">6</span>,<span class="dv">5</span>), <span class="at">SANsdY=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="at">LSTmeanZ=</span><span class="dv">0</span>, <span class="at">LSTsdZ=</span><span class="dv">0</span>, <span class="at">LANmeanZ=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>) ,<span class="at">LANsdZ=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="at">SSTmeanZ=</span><span class="dv">0</span>, <span class="at">SSTsdZ=</span><span class="dv">0</span>, <span class="at">SANmeanZ=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">SANsdZ=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="at">pop_code=</span><span class="st">&quot;styledimorphic&quot;</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4444</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>tristylous.dat <span class="ot">&lt;-</span><span class="fu">SimTrimor</span>(<span class="at">NIDL=</span><span class="dv">20</span>,<span class="at">NIDM=</span><span class="dv">20</span>,<span class="at">NIDS=</span><span class="dv">20</span>,</span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="at">LUPmeanX=</span><span class="dv">0</span>, <span class="at">LUPsdX=</span><span class="dv">0</span>, <span class="at">LBWmeanX=</span><span class="dv">0</span> ,<span class="at">LBWsdX=</span><span class="dv">0</span>, <span class="at">LLWmeanX=</span><span class="dv">0</span>, <span class="at">LLWsdX=</span><span class="dv">0</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="at">MUPmeanX=</span><span class="dv">0</span>, <span class="at">MUPsdX=</span><span class="dv">0</span>, <span class="at">MBWmeanX=</span><span class="dv">0</span> ,<span class="at">MBWsdX=</span><span class="dv">0</span>, <span class="at">MLWmeanX=</span><span class="dv">0</span>, <span class="at">MLWsdX=</span><span class="dv">0</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="at">SUPmeanX=</span><span class="dv">0</span>, <span class="at">SUPsdX=</span><span class="dv">0</span>, <span class="at">SBWmeanX=</span><span class="dv">0</span> ,<span class="at">SBWsdX=</span><span class="dv">0</span>, <span class="at">SLWmeanX=</span><span class="dv">0</span>, <span class="at">SLWsdX=</span><span class="dv">0</span>,</span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="at">LUPmeanY=</span><span class="dv">12</span>, <span class="at">LUPsdY=</span><span class="dv">2</span>, <span class="at">LBWmeanY=</span><span class="dv">8</span> ,<span class="at">LBWsdY=</span><span class="dv">2</span>, <span class="at">LLWmeanY=</span><span class="dv">4</span>, <span class="at">LLWsdY=</span><span class="dv">2</span>,</span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="at">MUPmeanY=</span><span class="dv">12</span>, <span class="at">MUPsdY=</span><span class="dv">2</span>, <span class="at">MBWmeanY=</span><span class="dv">8</span> ,<span class="at">MBWsdY=</span><span class="dv">2</span>, <span class="at">MLWmeanY=</span><span class="dv">4</span>, <span class="at">MLWsdY=</span><span class="dv">2</span>,</span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="at">SUPmeanY=</span><span class="dv">12</span>, <span class="at">SUPsdY=</span><span class="dv">2</span>, <span class="at">SBWmeanY=</span><span class="dv">8</span> ,<span class="at">SBWsdY=</span><span class="dv">2</span>, <span class="at">SLWmeanY=</span><span class="dv">4</span>, <span class="at">SLWsdY=</span><span class="dv">2</span>,</span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="at">LUPmeanZ=</span><span class="dv">0</span>, <span class="at">LUPsdZ=</span><span class="dv">0</span>, <span class="at">LBWmeanZ=</span><span class="dv">0</span> ,<span class="at">LBWsdZ=</span><span class="dv">0</span>, <span class="at">LLWmeanZ=</span><span class="dv">0</span>, <span class="at">LLWsdZ=</span><span class="dv">0</span>,</span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="at">MUPmeanZ=</span><span class="dv">0</span>, <span class="at">MUPsdZ=</span><span class="dv">0</span>, <span class="at">MBWmeanZ=</span><span class="dv">0</span> ,<span class="at">MBWsdZ=</span><span class="dv">0</span>, <span class="at">MLWmeanZ=</span><span class="dv">0</span>, <span class="at">MLWsdZ=</span><span class="dv">0</span>,</span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="at">SUPmeanZ=</span><span class="dv">0</span>, <span class="at">SUPsdZ=</span><span class="dv">0</span>, <span class="at">SBWmeanZ=</span><span class="dv">0</span> ,<span class="at">SBWsdZ=</span><span class="dv">0</span>, <span class="at">SLWmeanZ=</span><span class="dv">0</span>, <span class="at">SLWsdZ=</span><span class="dv">0</span>,</span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="at">pop_code=</span><span class="st">&quot;tristylous&quot;</span>)</span></code></pre></div>
+</div>
+<div id="estimating-indexes" class="section level1">
+<h1>Estimating indexes</h1>
+<div id="dimorphic-default-arguments" class="section level2">
+<h2>Dimorphic, default arguments</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 181.864 168.453      51.914      48.086   350.317</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.062 0.881 -2.009</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">inaccuracy</span>(distylous.dat)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;           nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; distylous 20 20 12.807 12.261      51.089      48.911    25.068</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;           Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; distylous                0.597 0.609 -0.915</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">inaccuracy</span>(styledimor<span class="fl">.2</span>antherwhorl.dat)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;                nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; styledimorphic 20 20  7.565  5.617      57.387      42.613    13.182</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac    r      R</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; styledimorphic                0.395 0.49 -0.275</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="fu">inaccuracy</span>(tristylous.dat)</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;            nL nS nM Inac.u Inac.d Inac.b, Inac.perc.u Inac.perc.d Inac.perc.b</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; tristylous 20 20 20 28.729 29.044   16.57      38.644      39.068      22.289</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;            TotalInac Mean2Stand.TotalInac     r     R</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; tristylous    74.343                1.091 0.382 0.207</span></span></code></pre></div>
+</div>
+<div id="dimorphic-ignoring-coordinates" class="section level2">
+<h2>Dimorphic, ignoring coordinates</h2>
+<p>Lets take a look on the arguments. First, we can analyse every
+dimension (or any subset of dimensions) separately using useonly.dim.
+Thus, we can analyse any subset of dimensions in the enantiostylous
+dataset:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 181.864 168.453      51.914      48.086   350.317</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.062 0.881 -2.009</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat, <span class="at">useonly.dim =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>))</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 148.085 141.799      51.084      48.916   289.884</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; enantiostylous                4.809 1.704 -14.22</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat, <span class="at">useonly.dim =</span> <span class="fu">c</span>(<span class="st">&quot;y&quot;</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;                nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 27.657 19.179       59.05       40.95    46.836</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.808 1.076 -4.864</span></span></code></pre></div>
+</div>
+<div id="dimorphic-getting-a-detailed-ouput-including-a-complete-list-of-indices-estimated-during-the-computation." class="section level2">
+<h2>Dimorphic, getting a detailed ouput including a complete list of
+indices estimated during the computation.</h2>
+<div id="verbose-output" class="section level3">
+<h3>verbose output</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat, <span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; $Result</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 181.864 168.453      51.914      48.086   350.317</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.062 0.881 -2.009</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; $Armbruster</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;                             [,1]</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.x           -0.1211759</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.y            5.6688235</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.z           15.3633263</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.x            0.7657808</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.y            4.4920783</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.z           14.9364003</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.x            0.5184849</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.y            4.2489372</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.z           15.5668827</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.x            0.1860686</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.y            5.5190979</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.z           15.1227286</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.x             0.4066072</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.y             4.9939111</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.z            15.1384495</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; Inac.u.xyz           181.8644592</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; Inac.d.xyz           168.4526335</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; Inac.perc.u           51.9142408</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; Inac.perc.d           48.0857592</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; TotalInac            350.3170927</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; Mean2Stand.TotalInac   1.0619392</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; $Sanchez</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt;         rL       sdrL         rS       sdrS          r        sdr          R </span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt;  0.6370448  0.3423479  0.6083007  0.3408080  0.8808268  0.3415779 -2.0087101</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="fu">inaccuracy</span>(distylous.dat, <span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt; $Result</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt;           nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt; distylous 20 20 12.807 12.261      51.089      48.911    25.068</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt;           Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt; distylous                0.597 0.609 -0.915</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt; $Armbruster</span></span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="co">#&gt;                            [,1]</span></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.x           0.0000000</span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.y           6.1709550</span></span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.z           0.0000000</span></span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.x           0.0000000</span></span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.y           6.6945614</span></span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.z           0.0000000</span></span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.x           0.0000000</span></span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.y           6.8632219</span></span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.z           0.0000000</span></span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.x           0.0000000</span></span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.y           6.1820935</span></span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.z           0.0000000</span></span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.x            0.0000000</span></span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.y            6.4777080</span></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.z            0.0000000</span></span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a><span class="co">#&gt; Inac.u.xyz           12.8071801</span></span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a><span class="co">#&gt; Inac.d.xyz           12.2612261</span></span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a><span class="co">#&gt; Inac.perc.u          51.0889285</span></span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a><span class="co">#&gt; Inac.perc.d          48.9110715</span></span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a><span class="co">#&gt; TotalInac            25.0684062</span></span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a><span class="co">#&gt; Mean2Stand.TotalInac  0.5974258</span></span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a><span class="co">#&gt; $Sanchez</span></span>
+<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a><span class="co">#&gt;         rL       sdrL         rS       sdrS          r        sdr          R </span></span>
+<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a><span class="co">#&gt;  0.4372564  0.3147873  0.4234320  0.3144124  0.6086771  0.3145998 -0.9148973</span></span>
+<span id="cb8-69"><a href="#cb8-69" tabindex="-1"></a><span class="fu">inaccuracy</span>(styledimor<span class="fl">.2</span>antherwhorl.dat, <span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-70"><a href="#cb8-70" tabindex="-1"></a><span class="co">#&gt; $Result</span></span>
+<span id="cb8-71"><a href="#cb8-71" tabindex="-1"></a><span class="co">#&gt;                nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb8-72"><a href="#cb8-72" tabindex="-1"></a><span class="co">#&gt; styledimorphic 20 20  7.565  5.617      57.387      42.613    13.182</span></span>
+<span id="cb8-73"><a href="#cb8-73" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac    r      R</span></span>
+<span id="cb8-74"><a href="#cb8-74" tabindex="-1"></a><span class="co">#&gt; styledimorphic                0.395 0.49 -0.275</span></span>
+<span id="cb8-75"><a href="#cb8-75" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-76"><a href="#cb8-76" tabindex="-1"></a><span class="co">#&gt; $Armbruster</span></span>
+<span id="cb8-77"><a href="#cb8-77" tabindex="-1"></a><span class="co">#&gt;                            [,1]</span></span>
+<span id="cb8-78"><a href="#cb8-78" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.x           0.0000000</span></span>
+<span id="cb8-79"><a href="#cb8-79" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.y           6.6296508</span></span>
+<span id="cb8-80"><a href="#cb8-80" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.z           0.0000000</span></span>
+<span id="cb8-81"><a href="#cb8-81" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.x           0.0000000</span></span>
+<span id="cb8-82"><a href="#cb8-82" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.y           4.9335541</span></span>
+<span id="cb8-83"><a href="#cb8-83" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.z           0.0000000</span></span>
+<span id="cb8-84"><a href="#cb8-84" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.x           0.0000000</span></span>
+<span id="cb8-85"><a href="#cb8-85" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.y           5.3712871</span></span>
+<span id="cb8-86"><a href="#cb8-86" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.z           0.0000000</span></span>
+<span id="cb8-87"><a href="#cb8-87" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.x           0.0000000</span></span>
+<span id="cb8-88"><a href="#cb8-88" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.y           6.3920654</span></span>
+<span id="cb8-89"><a href="#cb8-89" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.z           0.0000000</span></span>
+<span id="cb8-90"><a href="#cb8-90" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.x            0.0000000</span></span>
+<span id="cb8-91"><a href="#cb8-91" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.y            5.7753628</span></span>
+<span id="cb8-92"><a href="#cb8-92" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.z            0.0000000</span></span>
+<span id="cb8-93"><a href="#cb8-93" tabindex="-1"></a><span class="co">#&gt; Inac.u.xyz            7.5645392</span></span>
+<span id="cb8-94"><a href="#cb8-94" tabindex="-1"></a><span class="co">#&gt; Inac.d.xyz            5.6171002</span></span>
+<span id="cb8-95"><a href="#cb8-95" tabindex="-1"></a><span class="co">#&gt; Inac.perc.u          57.3869379</span></span>
+<span id="cb8-96"><a href="#cb8-96" tabindex="-1"></a><span class="co">#&gt; Inac.perc.d          42.6130621</span></span>
+<span id="cb8-97"><a href="#cb8-97" tabindex="-1"></a><span class="co">#&gt; TotalInac            13.1816394</span></span>
+<span id="cb8-98"><a href="#cb8-98" tabindex="-1"></a><span class="co">#&gt; Mean2Stand.TotalInac  0.3951945</span></span>
+<span id="cb8-99"><a href="#cb8-99" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-100"><a href="#cb8-100" tabindex="-1"></a><span class="co">#&gt; $Sanchez</span></span>
+<span id="cb8-101"><a href="#cb8-101" tabindex="-1"></a><span class="co">#&gt;         rL       sdrL         rS       sdrS          r        sdr          R </span></span>
+<span id="cb8-102"><a href="#cb8-102" tabindex="-1"></a><span class="co">#&gt;  0.3665220  0.2870184  0.3257386  0.2331246  0.4903509  0.2600715 -0.2752630</span></span>
+<span id="cb8-103"><a href="#cb8-103" tabindex="-1"></a><span class="fu">inaccuracy</span>(tristylous.dat, <span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-104"><a href="#cb8-104" tabindex="-1"></a><span class="co">#&gt; $Result</span></span>
+<span id="cb8-105"><a href="#cb8-105" tabindex="-1"></a><span class="co">#&gt;            nL nS nM Inac.u Inac.d Inac.b, Inac.perc.u Inac.perc.d Inac.perc.b</span></span>
+<span id="cb8-106"><a href="#cb8-106" tabindex="-1"></a><span class="co">#&gt; tristylous 20 20 20 28.729 29.044   16.57      38.644      39.068      22.289</span></span>
+<span id="cb8-107"><a href="#cb8-107" tabindex="-1"></a><span class="co">#&gt;            TotalInac Mean2Stand.TotalInac     r     R</span></span>
+<span id="cb8-108"><a href="#cb8-108" tabindex="-1"></a><span class="co">#&gt; tristylous    74.343                1.091 0.382 0.207</span></span>
+<span id="cb8-109"><a href="#cb8-109" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-110"><a href="#cb8-110" tabindex="-1"></a><span class="co">#&gt; $Armbruster</span></span>
+<span id="cb8-111"><a href="#cb8-111" tabindex="-1"></a><span class="co">#&gt;                           [,1]</span></span>
+<span id="cb8-112"><a href="#cb8-112" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.x           0.000000</span></span>
+<span id="cb8-113"><a href="#cb8-113" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.y          12.082536</span></span>
+<span id="cb8-114"><a href="#cb8-114" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.z           0.000000</span></span>
+<span id="cb8-115"><a href="#cb8-115" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.x           0.000000</span></span>
+<span id="cb8-116"><a href="#cb8-116" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.y           9.367871</span></span>
+<span id="cb8-117"><a href="#cb8-117" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.z           0.000000</span></span>
+<span id="cb8-118"><a href="#cb8-118" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.x           0.000000</span></span>
+<span id="cb8-119"><a href="#cb8-119" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.y           4.266537</span></span>
+<span id="cb8-120"><a href="#cb8-120" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.z           0.000000</span></span>
+<span id="cb8-121"><a href="#cb8-121" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.x           0.000000</span></span>
+<span id="cb8-122"><a href="#cb8-122" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.y           7.366806</span></span>
+<span id="cb8-123"><a href="#cb8-123" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.z           0.000000</span></span>
+<span id="cb8-124"><a href="#cb8-124" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.x            0.000000</span></span>
+<span id="cb8-125"><a href="#cb8-125" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.y            8.234141</span></span>
+<span id="cb8-126"><a href="#cb8-126" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.z            0.000000</span></span>
+<span id="cb8-127"><a href="#cb8-127" tabindex="-1"></a><span class="co">#&gt; Inac.u.xyz           28.728893</span></span>
+<span id="cb8-128"><a href="#cb8-128" tabindex="-1"></a><span class="co">#&gt; Inac.d.xyz           29.043963</span></span>
+<span id="cb8-129"><a href="#cb8-129" tabindex="-1"></a><span class="co">#&gt; Inac.perc.u.xyz      38.643787</span></span>
+<span id="cb8-130"><a href="#cb8-130" tabindex="-1"></a><span class="co">#&gt; Inac.perc.d.xyz      39.067595</span></span>
+<span id="cb8-131"><a href="#cb8-131" tabindex="-1"></a><span class="co">#&gt; TotalInac            74.342851</span></span>
+<span id="cb8-132"><a href="#cb8-132" tabindex="-1"></a><span class="co">#&gt; Mean2Stand.TotalInac  1.091441</span></span>
+<span id="cb8-133"><a href="#cb8-133" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-134"><a href="#cb8-134" tabindex="-1"></a><span class="co">#&gt; $Sanchez</span></span>
+<span id="cb8-135"><a href="#cb8-135" tabindex="-1"></a><span class="co">#&gt;       rUP     sdrUP      rLOW    sdrLOW       rBW     sdrBW         r       sdr </span></span>
+<span id="cb8-136"><a href="#cb8-136" tabindex="-1"></a><span class="co">#&gt; 0.3200462 0.2372732 0.2355012 0.1865024 0.2482535 0.1999195 0.3815272 0.2078984 </span></span>
+<span id="cb8-137"><a href="#cb8-137" tabindex="-1"></a><span class="co">#&gt;         R </span></span>
+<span id="cb8-138"><a href="#cb8-138" tabindex="-1"></a><span class="co">#&gt; 0.2068111</span></span></code></pre></div>
+</div>
+<div id="intramorph-comparisons-only." class="section level3">
+<h3>intramorph comparisons only.</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat, <span class="at">intramorph=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.L  Inac.S Inac.perc.L Inac.perc.S TotalInacINTRA</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 191.917 154.818       55.35       44.65        346.735</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInacINTRA     r      R</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; enantiostylous                     1.051 0.881 -2.009</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">inaccuracy</span>(distylous.dat, <span class="at">intramorph=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;           nL nS Inac.L Inac.S Inac.perc.L Inac.perc.S TotalInacINTRA</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; distylous 20 20 12.873 11.486      52.849      47.151         24.359</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;           Mean2Stand.TotalInacINTRA     r      R</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; distylous                     0.581 0.609 -0.915</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">inaccuracy</span>(styledimor<span class="fl">.2</span>antherwhorl.dat, <span class="at">intramorph=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;                nL nS Inac.L Inac.S Inac.perc.L Inac.perc.S TotalInacINTRA</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; styledimorphic 20 20  5.878  3.633      61.799      38.201          9.511</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInacINTRA    r      R</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; styledimorphic                     0.285 0.49 -0.275</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="fu">inaccuracy</span>(tristylous.dat, <span class="at">intramorph=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt;            Inac.L Inac.S Inac.M Inac.perc.L Inac.perc.S Inac.perc.M</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; tristylous 50.255 47.298 24.236      41.264      38.836        19.9</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt;            TotalInacINTRA Mean2Stand.TotalInacINTRA</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; tristylous        121.789                     1.788</span></span></code></pre></div>
+</div>
+<div id="missing-data" class="section level3">
+<h3>Missing data</h3>
+<p>By default, the inaccuracy function fail to compute input data
+containing at least one missing data. Using the argument na.rm = TRUE
+will perform computation ignoring the missing value for this particular
+individual and variable (just like na.rm does within the mean() or sd()
+functions).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># This will create new objects and insert NA in the first value of every y column</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>enantiostylous.dat_NA <span class="ot">&lt;-</span> enantiostylous.dat</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>distylous.dat_NA <span class="ot">&lt;-</span> distylous.dat</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>styledimor<span class="fl">.2</span>antherwhorl.dat_NA <span class="ot">&lt;-</span> styledimor<span class="fl">.2</span>antherwhorl.dat</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>tristylous.dat_NA <span class="ot">&lt;-</span> tristylous.dat</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>enantiostylous.dat_NA[<span class="dv">1</span>,<span class="st">&quot;y&quot;</span>] <span class="ot">&lt;-</span> distylous.dat_NA[<span class="dv">1</span>,<span class="st">&quot;y&quot;</span>] <span class="ot">&lt;-</span> styledimor<span class="fl">.2</span>antherwhorl.dat_NA[<span class="dv">1</span>,<span class="st">&quot;y&quot;</span>] <span class="ot">&lt;-</span> tristylous.dat_NA[<span class="dv">1</span>,<span class="st">&quot;y&quot;</span>]<span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 181.864 168.453      51.914      48.086   350.317</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.062 0.881 -2.009</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="fu">inaccuracy</span>(distylous.dat)</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt;           nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; distylous 20 20 12.807 12.261      51.089      48.911    25.068</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt;           Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; distylous                0.597 0.609 -0.915</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="fu">inaccuracy</span>(styledimor<span class="fl">.2</span>antherwhorl.dat)</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt;                nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; styledimorphic 20 20  7.565  5.617      57.387      42.613    13.182</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac    r      R</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; styledimorphic                0.395 0.49 -0.275</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="fu">inaccuracy</span>(tristylous.dat)</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt;            nL nS nM Inac.u Inac.d Inac.b, Inac.perc.u Inac.perc.d Inac.perc.b</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt; tristylous 20 20 20 28.729 29.044   16.57      38.644      39.068      22.289</span></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt;            TotalInac Mean2Stand.TotalInac     r     R</span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; tristylous    74.343                1.091 0.382 0.207</span></span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat, <span class="at">na.rm=</span>T)</span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="co">#&gt; Warning in inaccuracy(enantiostylous.dat, na.rm = T): Warning: there are missing</span></span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="co">#&gt; data for some sex organs and/or dimensions. The values retrieved may not be</span></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co">#&gt; comparable accross populations.</span></span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 181.864 168.453      51.914      48.086   350.317</span></span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.062 0.881 -2.009</span></span>
+<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a><span class="fu">inaccuracy</span>(distylous.dat, <span class="at">na.rm=</span>T)</span>
+<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a><span class="co">#&gt; Warning in inaccuracy(distylous.dat, na.rm = T): Warning: there are missing</span></span>
+<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a><span class="co">#&gt; data for some sex organs and/or dimensions. The values retrieved may not be</span></span>
+<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a><span class="co">#&gt; comparable accross populations.</span></span>
+<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a><span class="co">#&gt;           nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a><span class="co">#&gt; distylous 20 20 12.807 12.261      51.089      48.911    25.068</span></span>
+<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a><span class="co">#&gt;           Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a><span class="co">#&gt; distylous                0.597 0.609 -0.915</span></span>
+<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a><span class="fu">inaccuracy</span>(styledimor<span class="fl">.2</span>antherwhorl.dat, <span class="at">na.rm=</span>T)</span>
+<span id="cb10-49"><a href="#cb10-49" tabindex="-1"></a><span class="co">#&gt; Warning in inaccuracy(styledimor.2antherwhorl.dat, na.rm = T): Warning: there</span></span>
+<span id="cb10-50"><a href="#cb10-50" tabindex="-1"></a><span class="co">#&gt; are missing data for some sex organs and/or dimensions. The values retrieved may</span></span>
+<span id="cb10-51"><a href="#cb10-51" tabindex="-1"></a><span class="co">#&gt; not be comparable accross populations.</span></span>
+<span id="cb10-52"><a href="#cb10-52" tabindex="-1"></a><span class="co">#&gt;                nL nS Inac.u Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb10-53"><a href="#cb10-53" tabindex="-1"></a><span class="co">#&gt; styledimorphic 20 20  7.565  5.617      57.387      42.613    13.182</span></span>
+<span id="cb10-54"><a href="#cb10-54" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac    r      R</span></span>
+<span id="cb10-55"><a href="#cb10-55" tabindex="-1"></a><span class="co">#&gt; styledimorphic                0.395 0.49 -0.275</span></span>
+<span id="cb10-56"><a href="#cb10-56" tabindex="-1"></a><span class="fu">inaccuracy</span>(tristylous.dat, <span class="at">na.rm=</span>T)</span>
+<span id="cb10-57"><a href="#cb10-57" tabindex="-1"></a><span class="co">#&gt; Warning in inaccuracy(tristylous.dat, na.rm = T): Warning: there are missing</span></span>
+<span id="cb10-58"><a href="#cb10-58" tabindex="-1"></a><span class="co">#&gt; data for some sex organs and/or dimensions. The values retrieved may not be</span></span>
+<span id="cb10-59"><a href="#cb10-59" tabindex="-1"></a><span class="co">#&gt; comparable accross populations.</span></span>
+<span id="cb10-60"><a href="#cb10-60" tabindex="-1"></a><span class="co">#&gt;            nL nS nM Inac.u Inac.d Inac.b, Inac.perc.u Inac.perc.d Inac.perc.b</span></span>
+<span id="cb10-61"><a href="#cb10-61" tabindex="-1"></a><span class="co">#&gt; tristylous 20 20 20 28.729 29.044   16.57      38.644      39.068      22.289</span></span>
+<span id="cb10-62"><a href="#cb10-62" tabindex="-1"></a><span class="co">#&gt;            TotalInac Mean2Stand.TotalInac     r     R</span></span>
+<span id="cb10-63"><a href="#cb10-63" tabindex="-1"></a><span class="co">#&gt; tristylous    74.343                1.091 0.382 0.207</span></span></code></pre></div>
+</div>
+<div id="subsetting-verticiles" class="section level3">
+<h3>Subsetting verticiles</h3>
+<p>In datasets with multiple verticiles it is possible to focus the
+analysis in a given subset. For example, the code below applies the
+function to a subset of anthers only (namely AN1 and AN3):(</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 181.864 168.453      51.914      48.086   350.317</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.062 0.881 -2.009</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="fu">inaccuracy</span>(enantiostylous.dat,<span class="at">useonly.vert=</span><span class="fu">c</span>(<span class="st">&quot;ST&quot;</span>,<span class="st">&quot;AN1&quot;</span>,<span class="st">&quot;AN3&quot;</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt;                nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; enantiostylous 20 20 186.002 165.019      52.989      47.011    351.02</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt;                Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; enantiostylous                1.056 0.878 -2.009</span></span></code></pre></div>
+</div>
+<div id="multi-populations-inputs" class="section level3">
+<h3>Multi-populations inputs</h3>
+<p>All the input data used so far contains only one population, but the
+inaccuracy function can handle multiple populations and provide
+populational estimates. All the arguments detailed above behave the same
+regardless the number of populations:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="do">## This code will generate a five-populations input data:</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>SEEDS<span class="ot">&lt;-</span><span class="dv">4321</span><span class="sc">:</span><span class="dv">4325</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>exampleDataset<span class="ot">&lt;-</span><span class="fu">c</span>()</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(SEEDS))</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>{</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">set.seed</span>(SEEDS[i])</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>exampleDataset <span class="ot">&lt;-</span> <span class="fu">rbind</span>(exampleDataset,<span class="fu">SimDimor</span>(<span class="at">NIDL =</span> <span class="dv">10</span>,<span class="at">NIDS =</span> <span class="dv">10</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="at">Nst =</span> <span class="dv">1</span>, <span class="at">Nan =</span> <span class="dv">1</span>, <span class="at">LSTmeanX =</span> <span class="dv">22</span>, <span class="at">LSTsdX =</span> <span class="fl">0.7</span>, <span class="at">LANmeanX =</span> <span class="dv">6</span>, <span class="at">LANsdX =</span> <span class="fl">0.2</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="at">SSTmeanX =</span> <span class="dv">6</span>, <span class="at">SSTsdX =</span> <span class="fl">0.2</span>, <span class="at">SANmeanX =</span> <span class="dv">22</span>, <span class="at">SANsdX =</span> <span class="fl">0.7</span>, <span class="at">LSTmeanY =</span> <span class="dv">20</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="at">LSTsdY =</span> <span class="fl">0.5</span>, <span class="at">LANmeanY =</span> <span class="dv">8</span>, <span class="at">LANsdY =</span> <span class="fl">0.5</span>, <span class="at">SSTmeanY =</span> <span class="dv">8</span>, <span class="at">SSTsdY =</span> <span class="fl">0.5</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="at">SANmeanY =</span> <span class="dv">20</span>, <span class="at">SANsdY =</span> <span class="fl">0.5</span>, <span class="at">LSTmeanZ =</span> <span class="dv">18</span>, <span class="at">LSTsdZ =</span> <span class="fl">0.3</span>, <span class="at">LANmeanZ =</span> <span class="dv">9</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="at">LANsdZ =</span> <span class="fl">0.3</span>, <span class="at">SSTmeanZ =</span> <span class="dv">9</span>, <span class="at">SSTsdZ =</span> <span class="fl">0.3</span>, <span class="at">SANmeanZ =</span> <span class="dv">18</span>, <span class="at">SANsdZ =</span> <span class="fl">0.3</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="at">pop_code=</span><span class="fu">paste</span>(<span class="st">&quot;pop&quot;</span>,i,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)))</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>}</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="do">## Basic analysis</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="fu">inaccuracy</span>(exampleDataset)</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt;      nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co">#&gt; pop1 10 10 268.295 272.289      49.631      50.369   540.584</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co">#&gt; pop2 10 10 277.557 270.366      50.656      49.344   547.923</span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co">#&gt; pop3 10 10 266.543 266.738      49.982      50.018   533.281</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="co">#&gt; pop4 10 10 257.173 264.184      49.328      50.672   521.357</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="co">#&gt; pop5 10 10 271.842 267.075      50.442      49.558   538.916</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="co">#&gt;      Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a><span class="co">#&gt; pop1                0.919 0.666 -1.917</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a><span class="co">#&gt; pop2                0.949 0.679 -2.009</span></span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a><span class="co">#&gt; pop3                0.920 0.675 -1.911</span></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a><span class="co">#&gt; pop4                0.900 0.665 -1.854</span></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a><span class="co">#&gt; pop5                0.931 0.672 -1.952</span></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a><span class="do">## Verbose</span></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a><span class="fu">inaccuracy</span>(exampleDataset,<span class="at">verbose=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a><span class="co">#&gt; $Result</span></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a><span class="co">#&gt;      nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="co">#&gt; pop1 10 10 268.295 272.289      49.631      50.369   540.584</span></span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="co">#&gt; pop2 10 10 277.557 270.366      50.656      49.344   547.923</span></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a><span class="co">#&gt; pop3 10 10 266.543 266.738      49.982      50.018   533.281</span></span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a><span class="co">#&gt; pop4 10 10 257.173 264.184      49.328      50.672   521.357</span></span>
+<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a><span class="co">#&gt; pop5 10 10 271.842 267.075      50.442      49.558   538.916</span></span>
+<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a><span class="co">#&gt;      Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a><span class="co">#&gt; pop1                0.919 0.666 -1.917</span></span>
+<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a><span class="co">#&gt; pop2                0.949 0.679 -2.009</span></span>
+<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a><span class="co">#&gt; pop3                0.920 0.675 -1.911</span></span>
+<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a><span class="co">#&gt; pop4                0.900 0.665 -1.854</span></span>
+<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a><span class="co">#&gt; pop5                0.931 0.672 -1.952</span></span>
+<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-47"><a href="#cb12-47" tabindex="-1"></a><span class="co">#&gt; $Armbruster</span></span>
+<span id="cb12-48"><a href="#cb12-48" tabindex="-1"></a><span class="co">#&gt;                             [,1]</span></span>
+<span id="cb12-49"><a href="#cb12-49" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.x           14.2320135</span></span>
+<span id="cb12-50"><a href="#cb12-50" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.y           13.8476192</span></span>
+<span id="cb12-51"><a href="#cb12-51" tabindex="-1"></a><span class="co">#&gt; Mean.ST.u.z           13.5794139</span></span>
+<span id="cb12-52"><a href="#cb12-52" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.x           13.9981382</span></span>
+<span id="cb12-53"><a href="#cb12-53" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.y           13.8128908</span></span>
+<span id="cb12-54"><a href="#cb12-54" tabindex="-1"></a><span class="co">#&gt; Mean.AN.u.z           13.5009576</span></span>
+<span id="cb12-55"><a href="#cb12-55" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.x           13.7508114</span></span>
+<span id="cb12-56"><a href="#cb12-56" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.y           14.0241268</span></span>
+<span id="cb12-57"><a href="#cb12-57" tabindex="-1"></a><span class="co">#&gt; Mean.ST.d.z           13.4608860</span></span>
+<span id="cb12-58"><a href="#cb12-58" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.x           14.1447570</span></span>
+<span id="cb12-59"><a href="#cb12-59" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.y           13.8751140</span></span>
+<span id="cb12-60"><a href="#cb12-60" tabindex="-1"></a><span class="co">#&gt; Mean.AN.d.z           13.4616444</span></span>
+<span id="cb12-61"><a href="#cb12-61" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.x            14.0314300</span></span>
+<span id="cb12-62"><a href="#cb12-62" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.y            13.8899377</span></span>
+<span id="cb12-63"><a href="#cb12-63" tabindex="-1"></a><span class="co">#&gt; Mean.ALL.z            13.5007255</span></span>
+<span id="cb12-64"><a href="#cb12-64" tabindex="-1"></a><span class="co">#&gt; Inac.u.xyz           271.8416294</span></span>
+<span id="cb12-65"><a href="#cb12-65" tabindex="-1"></a><span class="co">#&gt; Inac.d.xyz           267.0745361</span></span>
+<span id="cb12-66"><a href="#cb12-66" tabindex="-1"></a><span class="co">#&gt; Inac.perc.u           50.4422852</span></span>
+<span id="cb12-67"><a href="#cb12-67" tabindex="-1"></a><span class="co">#&gt; Inac.perc.d           49.5577148</span></span>
+<span id="cb12-68"><a href="#cb12-68" tabindex="-1"></a><span class="co">#&gt; TotalInac            538.9161655</span></span>
+<span id="cb12-69"><a href="#cb12-69" tabindex="-1"></a><span class="co">#&gt; Mean2Stand.TotalInac   0.9306707</span></span>
+<span id="cb12-70"><a href="#cb12-70" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-71"><a href="#cb12-71" tabindex="-1"></a><span class="co">#&gt; $Sanchez</span></span>
+<span id="cb12-72"><a href="#cb12-72" tabindex="-1"></a><span class="co">#&gt;         rL       sdrL         rS       sdrS          r        sdr          R </span></span>
+<span id="cb12-73"><a href="#cb12-73" tabindex="-1"></a><span class="co">#&gt;  0.4772966  0.4412540  0.4736658  0.4367706  0.6724369  0.4390123 -1.9520806</span></span>
+<span id="cb12-74"><a href="#cb12-74" tabindex="-1"></a><span class="do">## Subsetting dimensions</span></span>
+<span id="cb12-75"><a href="#cb12-75" tabindex="-1"></a><span class="fu">inaccuracy</span>(exampleDataset,<span class="at">useonly.dim =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>))</span>
+<span id="cb12-76"><a href="#cb12-76" tabindex="-1"></a><span class="co">#&gt;      nL nS  Inac.u  Inac.d Inac.perc.u Inac.perc.d TotalInac</span></span>
+<span id="cb12-77"><a href="#cb12-77" tabindex="-1"></a><span class="co">#&gt; pop1 10 10 225.101 228.362      49.640      50.360   453.463</span></span>
+<span id="cb12-78"><a href="#cb12-78" tabindex="-1"></a><span class="co">#&gt; pop2 10 10 230.349 227.542      50.307      49.693   457.890</span></span>
+<span id="cb12-79"><a href="#cb12-79" tabindex="-1"></a><span class="co">#&gt; pop3 10 10 220.659 222.715      49.768      50.232   443.375</span></span>
+<span id="cb12-80"><a href="#cb12-80" tabindex="-1"></a><span class="co">#&gt; pop4 10 10 213.896 220.123      49.283      50.717   434.019</span></span>
+<span id="cb12-81"><a href="#cb12-81" tabindex="-1"></a><span class="co">#&gt; pop5 10 10 225.580 222.881      50.301      49.699   448.461</span></span>
+<span id="cb12-82"><a href="#cb12-82" tabindex="-1"></a><span class="co">#&gt;      Mean2Stand.TotalInac     r      R</span></span>
+<span id="cb12-83"><a href="#cb12-83" tabindex="-1"></a><span class="co">#&gt; pop1                1.130 0.736 -2.589</span></span>
+<span id="cb12-84"><a href="#cb12-84" tabindex="-1"></a><span class="co">#&gt; pop2                1.170 0.752 -2.714</span></span>
+<span id="cb12-85"><a href="#cb12-85" tabindex="-1"></a><span class="co">#&gt; pop3                1.122 0.744 -2.554</span></span>
+<span id="cb12-86"><a href="#cb12-86" tabindex="-1"></a><span class="co">#&gt; pop4                1.106 0.735 -2.508</span></span>
+<span id="cb12-87"><a href="#cb12-87" tabindex="-1"></a><span class="co">#&gt; pop5                1.143 0.745 -2.626</span></span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
